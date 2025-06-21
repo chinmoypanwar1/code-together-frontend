@@ -3,7 +3,6 @@ import { HomePage, LoginPage, SignupPage, DashboardPage, LoginFailedPage } from 
 import { useNavigate } from "react-router";
 import { useEffect } from "react";
 import { setRedirectFunction } from "../utils/redirect";
-import ProjectsPage from "../pages/ProjectsPage";
 
 function AppRouter() {
 
@@ -20,7 +19,6 @@ function AppRouter() {
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/login/failed" element={<LoginFailedPage />} />
       <Route path="/dashboard" element={<DashboardPage />} />
-      <Route path="/projects" element={<ProjectsPage />} />
     </Routes>
   )
 }

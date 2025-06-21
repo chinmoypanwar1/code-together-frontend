@@ -1,16 +1,19 @@
 import { NavLink, useNavigate } from "react-router";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks"
-import { useEffect, useState } from "react";
-import { getUserDetails } from "../api/user";
-import { logoutUser, setUser } from "../context/userslice";
+import { useEffect } from "react";
+import { getUserDetails, getUserProjectsDetails } from "../api/user";
+import { logoutUser, setUser } from "../context/userSlice";
 import { Button } from "@heroui/react";
+import UserDetails from "../components/Dashboard/UserDetails";
+import { setAllProjects } from "../context/projectSlice";
+import Projects from "../components/Dashboard/Projects";
+import CreateProjectModal from "../components/Dashboard/CreateProjectModal";
 
 function DashboardPage() {
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const user = useAppSelector((state) => state.user);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -19,18 +22,42 @@ function DashboardPage() {
         dispatch(setUser(res.data));
       } catch (error) {
         dispatch(logoutUser());
-        navigate("/login");
-      } finally {
-        setLoading(false);
+      }
+    }
+
+    const fetchUserProjects = async () => {
+      try {
+        const res = await getUserProjectsDetails();
+        const transformed = res.data.map((project) => ({
+          projectId: project.project_id,
+          projectName: project.name,
+          languages: project.dockerImage.languages || "",
+          projectTodos: project.project_todos.map((todo: any) => ({
+            todoId: todo.todo_id || "",
+            title: todo.title || "",
+            content: todo.content || "",
+            status: todo.status || ""
+          }))
+        }));
+        dispatch(setAllProjects(transformed));
+      } catch (error) {
+        console.log(error);
       }
     }
 
     fetchUserDetails();
+    fetchUserProjects();
   }, [dispatch, navigate])
 
-  if (loading) {
+  if (!user.isAuthenticated) {
     return (
-      <div>Loading....</div>
+      <div>
+        <Button color="primary">
+          <NavLink to={"/login"}>
+            Return back to login page.
+          </NavLink>
+        </Button>
+      </div>
     )
   }
 
@@ -38,12 +65,9 @@ function DashboardPage() {
     <>
       <div>
         <h1>Welcome to the dashboard.</h1>
-        <h2>Hello there {user?.username || "User"}</h2>
-        <Button color="primary">
-          <NavLink to={"/projects"}>
-            <h1>Take me to the projects!</h1>
-          </NavLink>
-        </Button>
+        <UserDetails />
+        <Projects />
+        <CreateProjectModal />
       </div>
     </>
   )

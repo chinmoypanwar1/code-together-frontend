@@ -1,24 +1,44 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userReducer from "./userslice";
-import { loadState, saveState } from "../utils/localStorage";
+import userReducer from "./userSlice";
+import projectReducer from "./projectSlice";
+import { loadProjectState, loadUserState, saveProjectState, saveUserState } from "../utils/localStorage";
 
 export const store = configureStore({
   reducer: {
-    user: userReducer
+    user: userReducer,
+    project: projectReducer,
   },
   preloadedState: {
-    user: loadState() || {
+    user: loadUserState() || {
       userId: "",
       username: "",
       email: "",
       profilePictureUrl: "",
       isAuthenticated: false,
     },
+    project: loadProjectState() || {
+      projects: [
+        {
+          projectId: "",
+          projectName: "",
+          languages: "",
+          projectTodos: [
+            {
+              todoId: "",
+              title: "",
+              content: "",
+              status: ""
+            }
+          ]
+        }
+      ]
+    },
   }
 })
 
 store.subscribe(() => {
-  saveState(store.getState().user);
+  saveUserState(store.getState().user);
+  saveProjectState(store.getState().project);
 })
 
 export type RootState = ReturnType<typeof store.getState>

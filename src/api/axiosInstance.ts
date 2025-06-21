@@ -1,5 +1,5 @@
 import axios from "axios";
-import { logoutUser } from "../context/userslice";
+import { logoutUser } from "../context/userSlice";
 import { store } from "../context/store";
 import { redirectToLogin } from "../utils/redirect";
 

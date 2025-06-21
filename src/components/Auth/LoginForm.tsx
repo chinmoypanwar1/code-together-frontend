@@ -32,7 +32,6 @@ function LoginForm() {
       const res = error.response.data;
       if (res.message.includes("email")) setServerError({ password: "", email: res.message })
       else if (res.message.includes("password")) setServerError({ email: "", password: res.message })
-      console.log(serverError)
     }
   }
 
