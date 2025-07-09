@@ -1,22 +1,28 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "./userSlice";
 import projectReducer from "./projectSlice";
-import { loadProjectState, loadUserState, saveProjectState, saveUserState } from "../utils/localStorage";
+import playgroundReducer from "./playgroundSlice";
+import yjsReducer from "./yjsSlice";
+import socketReducer from "./socketSlice"
+import { loadState, saveState } from "../utils/localStorage";
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
     project: projectReducer,
+    playground: playgroundReducer,
+    yjs: yjsReducer,
+    socket: socketReducer,
   },
   preloadedState: {
-    user: loadUserState() || {
+    user: loadState("userState") || {
       userId: "",
       username: "",
       email: "",
       profilePictureUrl: "",
       isAuthenticated: false,
     },
-    project: loadProjectState() || {
+    project: loadState("projectState") || {
       projects: [
         {
           projectId: "",
@@ -37,8 +43,8 @@ export const store = configureStore({
 })
 
 store.subscribe(() => {
-  saveUserState(store.getState().user);
-  saveProjectState(store.getState().project);
+  // saveState(store.getState().user, "userState")
+  // saveState(store.getState().project, "projectState")
 })
 
 export type RootState = ReturnType<typeof store.getState>

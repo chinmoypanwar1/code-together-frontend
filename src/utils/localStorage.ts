@@ -1,6 +1,6 @@
-const loadUserState = () => {
+const loadState = (stateName: string) => {
   try {
-    const serializedState = localStorage.getItem("userState");
+    const serializedState = localStorage.getItem(stateName);
     if (serializedState === null) return undefined;
     return JSON.parse(serializedState);
   } catch (err) {
@@ -8,33 +8,14 @@ const loadUserState = () => {
   }
 };
 
-const saveUserState = (state) => {
+const saveState = (state, stateName: string) => {
   try {
     const serializedState = JSON.stringify(state);
-    localStorage.setItem("userState", serializedState);
-  } catch (err) {}
-};
-
-const loadProjectState = () => {
-  try {
-    const serializedState = localStorage.getItem("projectState");
-    if (serializedState === null) return undefined;
-    return JSON.parse(serializedState);
-  } catch (err) {
-    return undefined;
-  }
-}
-
-const saveProjectState = (state) => {
-  try {
-    const serializedState = JSON.stringify(state);
-    localStorage.setItem("projectState", serializedState);
-  } catch (err) {}
+    localStorage.setItem(stateName, serializedState);
+  } catch (err) { }
 };
 
 export {
-  loadUserState,
-  saveUserState,
-  loadProjectState,
-  saveProjectState
+  loadState,
+  saveState
 }

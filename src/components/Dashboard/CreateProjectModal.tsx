@@ -61,6 +61,7 @@ export default function CreateProjectModal() {
     try {
       const res = await createProjectAPI(payload);
       const data = res.data;
+      console.log(res.data);
       const transformed = {
         projectId: data.project_id,
         projectName: data.name,
@@ -72,7 +73,9 @@ export default function CreateProjectModal() {
           status: todo.status || ""
         }))
       };
+      console.log('Works till here');
       dispatch(createProject(transformed));
+      console.log('Works till here as well.');
     } catch (error) {
       console.log(error);
       setError(error.response.data);
@@ -100,14 +103,16 @@ export default function CreateProjectModal() {
                   selectedKeys={selectedImageId}
                   variant="flat"
                   onSelectionChange={setSelectedImageId}
+                  aria-label="Please select an image:"
                 >
                   {
                     images.map(image => (
                       <ListboxItem
                         key={image.dockerImage_id}
-                        description={`Name: ${image.name}, ID: ${image.dockerImage_id}`}
+                        description={`Name: ${image.displayName}, ID: ${image.dockerImage_id}`}
+                        textValue={image.dockerImage_id}
                       >
-                        The name of the image is : {image.name}
+                        The name of the image is : {image.displayName}
                       </ListboxItem>
                     ))
                   }

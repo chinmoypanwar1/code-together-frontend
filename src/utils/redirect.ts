@@ -4,7 +4,7 @@ export const setRedirectFunction = (func) => {
   redirectFunction = func;
 };
 
-export const redirectToLogin = () => {
-  if (redirectFunction) redirectFunction("/login");
+export const redirectToDashboard = () => {
+  if (redirectFunction) redirectFunction("/dashboard");
 };
 

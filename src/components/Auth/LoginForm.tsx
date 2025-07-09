@@ -29,6 +29,8 @@ function LoginForm() {
       await login(data);
       navigate("/dashboard");
     } catch (error) {
+      console.log(error);
+      if (!error || !error.response || !error.response.data) return;
       const res = error.response.data;
       if (res.message.includes("email")) setServerError({ password: "", email: res.message })
       else if (res.message.includes("password")) setServerError({ email: "", password: res.message })

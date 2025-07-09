@@ -1,6 +1,7 @@
 import axiosInstance from "./axiosInstance";
 
 async function login(data) {
+  console.log('The data is coming out to be: ', data);
   const response = await axiosInstance.post("/auth/local/login", data);
   return response;
 }

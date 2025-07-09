@@ -1,7 +1,7 @@
 import { Card, CardHeader, CardFooter, Divider, Button } from "@heroui/react";
-import { useAppDispatch } from "../../hooks/reduxHooks";
-import { deleteProjectAPI } from "../../api/project";
-import { deleteProject } from "../../context/projectSlice";
+import { useNavigate } from "react-router";
+import { startProjectAPI } from "../../api/project";
+import DeleteProjectModal from "./DeleteProjectModal";
 
 type Props = {
   projectName: string;
@@ -9,18 +9,20 @@ type Props = {
   languages: string;
 };
 
-export default function ProjectCard({ projectName, projectId, languages } : Props) {
+export default function ProjectCard({ projectName, projectId, languages }: Props) {
 
-  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
-  const handleDelete = async () => {
+  const handleProject = async () => {
     try {
-      await deleteProjectAPI({projectId});
-      dispatch(deleteProject({projectId}));
+      const response = await startProjectAPI({ projectId });
+      console.log(response);
+      navigate(`/playground?projectId=${projectId}`)
     } catch (error) {
       console.log(error);
     }
   }
+
   return (
     <Card className="max-w-[400px]">
       <CardHeader className="flex gap-3">
@@ -32,9 +34,10 @@ export default function ProjectCard({ projectName, projectId, languages } : Prop
         </div>
       </CardHeader>
       <Divider />
-      <Button color="danger" onClick={handleDelete}>
-        Delete project!
+      <Button color="secondary" onClick={handleProject}>
+        Enter project!
       </Button>
+      <DeleteProjectModal projectName={projectName} projectId={projectId} />
       <CardFooter>
         <div>
           <p>Languages: </p>
